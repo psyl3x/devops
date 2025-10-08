@@ -197,13 +197,22 @@ def print_results(results: Dict[str, List[Dict]]):
 
 
 if __name__ == '__main__':
-    # Example queries (commas fixed)
-    queries_to_search = [
+    raw_queries = [
         "cloud infrastructure engineer",
         "infrastructure engineer",
         "azure cloud engineer",
         "cloud engineer",
     ]
+
+    # normalize and dedupe while preserving order
+    seen = set()
+    queries_to_search = []
+    for q in raw_queries:
+        q_norm = ' '.join(q.lower().strip().split())
+        if q_norm in seen:
+            continue
+        seen.add(q_norm)
+        queries_to_search.append(q)
 
     results = search_multiple_queries(queries_to_search, max_pages_per_query=3)
     print_results(results)
